@@ -1,78 +1,61 @@
-
+"use strict";
 const customersList = [];
-
+function getElementById(elementName) {
+    return document.getElementById(elementName);
+}
 function showCustomer() {
-  document.getElementById("customer-list").innerHTML = '';
-  customersList.forEach((customer) => {
-    let ul = document.getElementById("customer-list");
-    ul.innerHTML += `<li class="list-group-item" onclick="showForm();loadClient(${customer.nip});">${customer.name} (${customer.nip})</li>`;
-  });
-  showList();
+    getElementById("customer-list").innerHTML = '';
+    customersList.forEach((customer) => {
+        let ul = getElementById("customer-list");
+        ul.innerHTML += `<li class="list-group-item" onclick="showForm();loadClient(${customer.nip});">${customer.customerInfo()}</li>`;
+    });
+    showList();
 }
-
-function showForm(){
-  document.getElementById("client-form").style.display = "block";
-  document.getElementById("client-list").style.display = "none";
+function showForm() {
+    getElementById("client-form").style.display = "block";
+    getElementById("client-list").style.display = "none";
 }
-
-function showList(){
-  document.getElementById("client-form").style.display = "none";
-  document.getElementById("client-list").style.display = "block";
+function showList() {
+    getElementById("client-form").style.display = "none";
+    getElementById("client-list").style.display = "block";
 }
-
 function save(event) {
-  event.preventDefault();
-  let newCustomer = {
-      name: document.getElementById("company-name").value,
-      nip: document.getElementById("nip").value,
-      city: document.getElementById("city").value,
-      street: document.getElementById("street").value,
-      houseNumber: document.getElementById("house-number").value,
-      zipCode: document.getElementById("zipcode").value,
-      comments: document.getElementById("comments").value,
-      industry: document.getElementById("industry").value,
-      active: document.getElementById("active").checked,
-  }
-  let foundCustomer = null;
-  for (let i = 0; i < customersList.length; i++) {
-    if(customersList[i].nip == newCustomer.nip){
-      foundCustomer = customersList[i];
-      customersList[i] = newCustomer;
+    event.preventDefault();
+    let newCustomer = new Client();
+    newCustomer.name = getElementById("company-name").value;
+    newCustomer.nip = getElementById("nip").value;
+    newCustomer.city = getElementById("city").value;
+    newCustomer.street = getElementById("street").value;
+    newCustomer.houseNumber = getElementById("house-number").value;
+    newCustomer.zipCode = getElementById("zipcode").value;
+    newCustomer.comments = getElementById("comments").value;
+    newCustomer.industry = getElementById("industry").value;
+    newCustomer.active = getElementById("active").checked;
+    let foundCustomer = null;
+    for (let i = 0; i < customersList.length; i++) {
+        if (customersList[i].nip == newCustomer.nip) {
+            foundCustomer = customersList[i];
+            customersList[i] = newCustomer;
+        }
     }
-  }
-  if(foundCustomer == null){
-    customersList.push(newCustomer);
-  }
-  console.log(customersList)
-  showCustomer();
+    if (foundCustomer == null) {
+        customersList.push(newCustomer);
+    }
+    console.log(customersList);
+    showCustomer();
 }
-
 function loadClient(nip) {
-  let newCustomer = customersList.find((customer) => customer.nip == nip);
-  if(newCustomer == null){
-    newCustomer = getEmptyCustomer();
-  }
-  document.getElementById("company-name").value = newCustomer.name
-  document.getElementById("nip").value = newCustomer.nip
-  document.getElementById("city").value = newCustomer.city
-  document.getElementById("street").value = newCustomer.street
-  document.getElementById("house-number").value = newCustomer.houseNumber
-  document.getElementById("zipcode").value = newCustomer.zipCode
-  document.getElementById("comments").value = newCustomer.comments
-  document.getElementById("industry").value = newCustomer.industry
-  document.getElementById("active").checked = newCustomer.active
-}
-
-function getEmptyCustomer(){
-  return {
-        name: "",
-        nip: '',
-        city: "",
-        street: "",
-        houseNumber: '',
-        zipCode: '',
-        comments: "",
-        industry: '',
-        active: true,
-    };
+    let newCustomer = customersList.find((customer) => customer.nip == nip);
+    if (newCustomer == null) {
+        newCustomer = new Client();
+    }
+    getElementById("company-name").value = newCustomer.name;
+    getElementById("nip").value = newCustomer.nip;
+    getElementById("city").value = newCustomer.city;
+    getElementById("street").value = newCustomer.street;
+    getElementById("house-number").value = newCustomer.houseNumber;
+    getElementById("zipcode").value = newCustomer.zipCode;
+    getElementById("comments").value = newCustomer.comments;
+    getElementById("industry").value = newCustomer.industry;
+    getElementById("active").checked = newCustomer.active;
 }
